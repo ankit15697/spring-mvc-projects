@@ -23,7 +23,7 @@ public class EmployeeController {
     @RequestMapping(value="/save",method = RequestMethod.POST)
     public String save(@ModelAttribute("emp") Employee emp){
         crud.save(emp);
-        return "redirect:/viewemp";//will redirect to viewemp request mapping
+        return "redirect:/viewemp";
     }
     @RequestMapping("/viewemp")
     public String viewemp(Model m){
