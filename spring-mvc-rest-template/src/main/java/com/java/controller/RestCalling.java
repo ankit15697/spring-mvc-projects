@@ -1,15 +1,17 @@
 package com.java.controller;
 
 import com.java.employee.Employee;
-
-import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Scanner;
+
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 // This class will call the rest api
 public class RestCalling {
-        private static final String GET_ALL_URL = "http://localhost:8080/spring/rest/emps";
-        private static final String CREATE_EMP_URL = "http://localhost:8080/spring/rest/emp/create";
+        private static final String GET_ALL_URL = "http://localhost:8080/spring1/rest/emps";
+        private static final String CREATE_EMP_URL = "http://localhost:8080/spring1/rest/emp/create";
         private Scanner sc = new Scanner(System.in);
         public  void callMethods(){
            while (true) {
@@ -31,11 +33,7 @@ public class RestCalling {
 
         private void getAllEmployee() {
             RestTemplate restTemplate = new RestTemplate();
-            List<LinkedHashMap> emps = restTemplate.getForObject(GET_ALL_URL, List.class);
-            System.out.println(emps.size());
-            for(LinkedHashMap map : emps){
-                System.out.println("ID="+map.get("id")+",Name="+map.get("name")+",Department Name ="+map.get("department"));;
-            }
+            System.out.println(restTemplate.getForObject(GET_ALL_URL, String.class));
         }
 
         private void createEmployee() {
@@ -44,11 +42,15 @@ public class RestCalling {
             emp.setId(5);
             emp.setName("Ankit");
             emp.setDepartment("IT");
-            Employee response = restTemplate.postForObject(CREATE_EMP_URL, emp, Employee.class);
-            printEmpData(response);
-        }
+           // Employee response = restTemplate.postForObject(CREATE_EMP_URL, emp, Employee.class);
+           // restTemplate.postForObject(CREATE_EMP_URL, emp, String.class);
+           // RestTemplate restTemplate = new RestTemplate();
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Content-Type", "application/json");
+            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+            restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
+            HttpEntity request = new HttpEntity(emp, headers);
+            restTemplate.postForObject(CREATE_EMP_URL, request, String.class);
 
-        private void printEmpData(Employee emp){
-            System.out.println("ID="+emp.getId()+",Name="+emp.getName()+",Department Name : = "+emp.getDepartment());
         }
 }
