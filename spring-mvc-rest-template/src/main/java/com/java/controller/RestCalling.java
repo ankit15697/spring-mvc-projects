@@ -42,9 +42,6 @@ public class RestCalling {
             emp.setId(5);
             emp.setName("Ankit");
             emp.setDepartment("IT");
-           // Employee response = restTemplate.postForObject(CREATE_EMP_URL, emp, Employee.class);
-           // restTemplate.postForObject(CREATE_EMP_URL, emp, String.class);
-           // RestTemplate restTemplate = new RestTemplate();
             HttpHeaders headers = new HttpHeaders();
             headers.set("Content-Type", "application/json");
             restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
